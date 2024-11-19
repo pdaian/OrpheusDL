@@ -11,6 +11,7 @@ from utils.models import *
 from utils.utils import *
 from utils.exceptions import *
 
+from customconfig import OFFSET
 
 def beauty_format_seconds(seconds: int) -> str:
     time_data = gmtime(seconds)
@@ -286,6 +287,11 @@ class Downloader:
         self.print(f'=== Artist {artist_name} downloaded ===', drop_level=1)
 
     def download_track(self, track_id, album_location='', main_artist='', track_index=0, number_of_tracks=0, cover_temp_location='', indent_level=1, m3u_playlist=None, extra_kwargs={}):
+        if int(track_index) <= OFFSET:
+            print("Skipping", track_index)
+            return
+        else:
+            print("Doing", track_index, OFFSET)
         quality_tier = QualityEnum[self.global_settings['general']['download_quality'].upper()]
         codec_options = CodecOptions(
             spatial_codecs = self.global_settings['codecs']['spatial_codecs'],
